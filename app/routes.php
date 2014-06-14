@@ -24,8 +24,8 @@ Route::get('fetch', function()
         Cache::put('stock_data_' . date('Y-m-d') . $stock, $data, 60 * 24);
     }
 
-    echo '<pre>';
-    print_r($data);
+    // pretty print data
+    pp($data);
 });
 
 Route::get('/', function() {
