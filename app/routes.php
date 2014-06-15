@@ -1,13 +1,14 @@
 <?php
 
-Route::get('fetch', function()
-{
+Route::get('fetch', function() {
     // fetch stock from query string
     $stock = Input::get('stock');
 
-    $data = Cache::get('stock_data_' . date('Y-m-d') . $stock);
+    // cache key is a unique string of resource type, date, and resource id
+    $cache_key = 'stock_data' . date('Y-m-d') . $stock;
 
-    if (!$data) {
+    // build query at https://developer.yahoo.com/yql/console/
+    if ( ! Cache::has($cache_key) ) {
         $resource = "https://query.yahooapis.com/v1/public/yql?q=";
         $resource .= urlencode("select * from yahoo.finance.quotes ");
         $resource .= urlencode("where symbol in ('$stock')");
@@ -16,18 +17,41 @@ Route::get('fetch', function()
 
         // fetch the json
         try {
-            $data = file_get_contents($resource);
+            $data = json_decode(file_get_contents($resource));
         } catch (Exception $e) {
-            $data = json_encode(['error' => $e->getMessage()]);
+            $data = ['error' => $e->getMessage()];
         }
 
-        Cache::put('stock_data_' . date('Y-m-d') . $stock, $data, 60 * 24);
+        // cache for a day
+        Cache::put($cache_key, $data, 60 * 24);
     }
 
     // pretty print data
-    pp($data);
+    pp( Cache::get($cache_key) );
 });
 
 Route::get('/', function() {
     return View::make('stocks.index');
 });
+
+Route::get('store_stocks', 'StockController@create');
+
+    $path = app_path() . '/resources/stock_lists/Nasdaq.csv';
+
+    $file = fopen($path, "r");
+
+    $stocks = [];
+
+    while(! feof($file)) {
+        $stock = fgetcsv($file);
+        unset($stock[9]);
+        
+        $stocks[] = $stock;
+    }
+
+    pp($stocks);
+
+    fclose($file);
+});
+
+
