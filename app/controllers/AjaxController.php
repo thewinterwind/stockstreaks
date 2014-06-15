@@ -21,20 +21,26 @@ class AjaxController extends BaseController {
                 'dt' => 1
             ],
             [
-                'db' => 'name',
+                'db' => 'move_percentage',
                 'dt' => 2
             ],
             [
-                'db' => 'exchange',
+                'db' => 'name',
                 'dt' => 3
             ],
             [
-                'db' => 'sector',
+                'db' => 'exchange',
                 'dt' => 4
+            ],
+            [
+                'db' => 'sector',
+                'dt' => 5
             ],
         ];
 
-        return $this->datatables->get(Input::all(), $columns);
+        $stock_data = $this->datatables->get(Input::all(), $columns);
+
+        return Response::json($stock_data);
     } 
 
 }

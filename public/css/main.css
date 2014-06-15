@@ -5,3 +5,15 @@
 .negative {
     color: red;
 }
+
+th {
+    background-color: rgb(54, 182, 29) !important;
+    color: white;
+    text-shadow: 1px 1px #000;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+h2 {
+    font-family: monospace;
+}

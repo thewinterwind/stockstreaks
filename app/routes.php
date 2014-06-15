@@ -1,41 +1,18 @@
 <?php
 
-Route::get('fetch', function() {
-    // fetch stock from query string
-    $stock = Input::get('stock');
+ini_set("memory_limit", "-1");
+set_time_limit(0);
 
-    // cache key is a unique string of resource type, date, and resource id
-    $cache_key = 'stock_data' . date('Y-m-d') . $stock;
+Route::get('fetch', 'APIController@get_stock_data');
 
-    // build query at https://developer.yahoo.com/yql/console/
-    if ( ! Cache::has($cache_key) ) {
-        $resource = "https://query.yahooapis.com/v1/public/yql?q=";
-        $resource .= urlencode("select * from yahoo.finance.quotes ");
-        $resource .= urlencode("where symbol in ('$stock')");
-        $resource .= "&format=json&diagnostics=true";
-        $resource .= "&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys&callback=";
-
-        // fetch the json
-        try {
-            $data = json_decode(file_get_contents($resource));
-        } catch (Exception $e) {
-            $data = ['error' => $e->getMessage()];
-        }
-
-        // cache for a day
-        Cache::put($cache_key, $data, 60 * 24);
-    }
-
-    // pretty print data
-    pp( Cache::get($cache_key) );
-});
-
-Route::get('/', function() {
-    return View::make('stocks.index');
-});
+Route::get('/', 'StockController@index');
 
 Route::get('store', 'StockController@store');
 
 Route::get('ajax/stock_data', 'AjaxController@stock_data');
 
-Route::get('ajax/stock_data1', 'AjaxController@stock_data');
+Route::get('api/historical', 'APIController@fetch_historical_stock_data');
+
+Route::get('backend/store_historical', 'BackendController@store_historical_data');
+
+Route::get('backend/store_streak', 'BackendController@store_streak');

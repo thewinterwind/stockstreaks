@@ -2,9 +2,13 @@
 
 class StockController extends BaseController {
 
-	public function store()
-	{
-        // CSV lists from http://www.nasdaq.com/screening/company-list.aspx
+    public function index()
+    {
+        return View::make('stocks.index');
+    }
+
+    public function store()
+    {
         $files = File::files(app_path() . '/resources/stock_lists');
 
         $stocks = [];
