@@ -34,24 +34,6 @@ Route::get('/', function() {
     return View::make('stocks.index');
 });
 
-Route::get('store_stocks', 'StockController@create');
+Route::get('store', 'StockController@store');
 
-    $path = app_path() . '/resources/stock_lists/Nasdaq.csv';
-
-    $file = fopen($path, "r");
-
-    $stocks = [];
-
-    while(! feof($file)) {
-        $stock = fgetcsv($file);
-        unset($stock[9]);
-        
-        $stocks[] = $stock;
-    }
-
-    pp($stocks);
-
-    fclose($file);
-});
-
-
+Route::get('ajax/stock_data', 'AjaxController@stock_data');

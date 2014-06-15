@@ -8,3 +8,12 @@ if (!function_exists('pp'))
         print_r($value);
     }
 }
+
+if (!function_exists('ppd'))
+{
+    function ppd($value)
+    {
+        pp($value);
+        die;
+    }
+}

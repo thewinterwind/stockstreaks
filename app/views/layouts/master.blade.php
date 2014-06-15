@@ -15,6 +15,8 @@
     </div>
 
     <script src="/js/jquery-1.11.1.min.js"></script>
+    <script src="//cdn.datatables.net/1.10.0/js/jquery.dataTables.js"></script>
     <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+    <script src="/js/main.js"></script>
 </body>
 </html>

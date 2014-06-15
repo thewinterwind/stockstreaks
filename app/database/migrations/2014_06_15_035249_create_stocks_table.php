@@ -3,16 +3,14 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateStocklistsTable extends Migration {
+class CreateStocksTable extends Migration {
 
 	/**
 	 * Run the migrations.
-	 *
-	 * @return void
 	 */
 	public function up()
 	{
-		Schema::create('stocklists', function($table)
+		Schema::create('stocks', function($table)
         {
             $table->increments('id');
             $table->string('symbol', 20);
@@ -24,17 +22,16 @@ class CreateStocklistsTable extends Migration {
             $table->string('last_sale');
             $table->string('market_cap');
             $table->string('summary_link');
+            $table->timestamp('updated_at');
         });
 	}
 
 	/**
 	 * Reverse the migrations.
-	 *
-	 * @return void
 	 */
 	public function down()
 	{
-		Schema::drop('stocklists');
+		Schema::drop('stocks');
 	}
 
 }
