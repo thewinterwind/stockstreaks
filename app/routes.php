@@ -37,3 +37,5 @@ Route::get('/', function() {
 Route::get('store', 'StockController@store');
 
 Route::get('ajax/stock_data', 'AjaxController@stock_data');
+
+Route::get('ajax/stock_data1', 'AjaxController@stock_data');

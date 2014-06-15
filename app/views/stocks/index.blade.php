@@ -3,29 +3,27 @@
 @section('content')
 
     <h2>Consecutive Positive/Negative Closing Price Streaks</h2>
-    <table class="table table-bordered">
+    <table class="table table-bordered datatables">
         <thead>
             <tr>
                 <th>Symbol</th>
                 <th>Streak</th>
                 <th>Name</th>
-                <th>Streak Move %</th>
+                <th>Exchange</th>
+                <th>Sector</th>
             </tr>
         </thead>
-        <tbody>
+
+        <tfoot>
             <tr>
-                <td>MSFT</td>
-                <td class="positive">+3 days</td>
-                <td>Microsoft</td>
-                <td class="positive">+17%</td>
+                <th>Symbol</th>
+                <th>Streak</th>
+                <th>Name</th>
+                <th>Exchange</th>
+                <th>Sector</th>
             </tr>
-            <tr>
-                <td>YHOO</td>
-                <td class="negative">-4 days</td>
-                <td>Yahoo!</td>
-                <td class="negative">-27%</td>
-            </tr>
-        </tbody>
+        </tfoot>
+
     </table>
 
 @stop
