@@ -2,8 +2,8 @@
 
 class APIController extends BaseController {
 
-	public function get_stock_data()
-	{
+    public function get_stock_data()
+    {
         // fetch stock from query string
         $stock = Input::get('stock');
 
@@ -35,26 +35,24 @@ class APIController extends BaseController {
 
     public function fetch_historical_stock_data()
     {
-        $stocks = Stock::select('symbol')->get()->toArray();
+        $stocks = DB::table('stocks')->select('symbol')->get();
 
-        $symbols = array_pluck($stocks, 'symbol');
-
-        foreach ($symbols as $symbol) {
-            try
+        foreach ($stocks as $stock) {
+            if (!file_exists(app_path() . '/resources/lists_demo/' . $stock->symbol . '.csv'))
             {
-                if (!file_exists(app_path() . '/resources/historical_lists/' . $symbol . '.csv'))
+                try
                 {
-                    $csv_data = file_put_contents(
-                        app_path() . '/resources/historical_lists/' . $symbol . '.csv', 
-                        file_get_contents('http://ichart.finance.yahoo.com/table.csv?s=' . $symbol)
+                    file_put_contents(
+                        app_path() . '/resources/historical_lists/' . $stock->symbol . '.csv', 
+                        file_get_contents('http://ichart.finance.yahoo.com/table.csv?s=' . $stock->symbol)
                     );
+                    print 'Downloaded csv for: ' . $stock->symbol . PHP_EOL;
                 }
-            }
-            catch (Exception $e)
-            {
-                echo 'Failed fetching csv for: ' . $symbol . '<br/>';
+                catch (Exception $e)
+                {
+                    print 'Failed fetching csv for: ' . $stock->symbol . PHP_EOL;
+                }
             }
         }
     }
-
 }
