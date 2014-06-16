@@ -45,7 +45,7 @@ class APIController extends BaseController {
             {
                 try
                 {
-                    $bytes = file_put_contents(
+                    $bytes = @file_put_contents(
                         app_path() . '/resources/lists_demo/' . $stock->symbol . '.csv', 
                         @file_get_contents('http://ichart.finance.yahoo.com/table.csv?s=' . $stock->symbol)
                     );
