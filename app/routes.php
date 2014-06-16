@@ -1,8 +1,5 @@
 <?php
 
-ini_set("memory_limit", "-1");
-set_time_limit(0);
-
 Route::get('fetch', 'APIController@get_stock_data');
 
 Route::get('/', 'StockController@index');

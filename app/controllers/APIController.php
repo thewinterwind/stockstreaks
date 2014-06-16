@@ -35,6 +35,9 @@ class APIController extends BaseController {
 
     public function fetch_historical_stock_data()
     {
+        # ini_set("memory_limit", "-1");
+        set_time_limit(0);
+
         $stocks = DB::table('stocks')->select('symbol')->get();
 
         foreach ($stocks as $stock) {
