@@ -25,7 +25,7 @@ $app = new Illuminate\Foundation\Application;
 */
 
 $env = $app->detectEnvironment(function() {
-    return getenv('env') ?: 'local';
+    return gethostname() == 'enchanted-forest' ? 'production' : 'local';
 });
 
 /*
