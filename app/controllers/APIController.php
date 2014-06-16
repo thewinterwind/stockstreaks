@@ -45,11 +45,15 @@ class APIController extends BaseController {
             {
                 try
                 {
-                    file_put_contents(
+                    $bytes = file_put_contents(
                         app_path() . '/resources/historical_lists/' . $stock->symbol . '.csv', 
                         @file_get_contents('http://ichart.finance.yahoo.com/table.csv?s=' . $stock->symbol)
                     );
-                    print 'Downloaded csv for: ' . $stock->symbol . PHP_EOL;
+                    
+                    if ($bytes)
+                    {
+                        print 'Downloaded csv for: ' . $stock->symbol . ' (' . $bytes .  ' bytes)' . PHP_EOL;
+                    }
                 }
                 catch (Exception $e)
                 {
