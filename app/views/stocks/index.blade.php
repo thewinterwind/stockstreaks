@@ -2,7 +2,7 @@
 
 @section('content')
 
-    <h2>Stockstreaks.com Winning/Losing Closing Price Streaks</h2><br>
+    <h2>{{ $header }}</h2><br>
     <table class="table table-bordered table-striped datatables">
         <thead>
             <tr>
@@ -25,7 +25,6 @@
                 <th>Sector</th>
             </tr>
         </tfoot>
-
     </table>
 
 @stop

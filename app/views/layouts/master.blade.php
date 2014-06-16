@@ -1,7 +1,9 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title></title>
+    <title>{{ $title }}</title>
+    <meta type="description" content="{{ $description }}">
+    <meta type="author" content="Anthony Vipond">
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="//cdn.datatables.net/1.10.0/css/jquery.dataTables.css">
