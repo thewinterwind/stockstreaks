@@ -47,7 +47,7 @@ class APIController extends BaseController {
                 {
                     file_put_contents(
                         app_path() . '/resources/historical_lists/' . $stock->symbol . '.csv', 
-                        file_get_contents('http://ichart.finance.yahoo.com/table.csv?s=' . $stock->symbol)
+                        @file_get_contents('http://ichart.finance.yahoo.com/table.csv?s=' . $stock->symbol)
                     );
                     print 'Downloaded csv for: ' . $stock->symbol . PHP_EOL;
                 }
