@@ -52,7 +52,7 @@ class APIController extends BaseController {
                     
                     if ($bytes)
                     {
-                        print 'Downloaded csv for: ' . $stock->symbol . ' (' . $bytes .  ' bytes)' . PHP_EOL;
+                        print 'Stored csv for: ' . $stock->symbol . ' (' . $bytes .  ' bytes)' . PHP_EOL;
                     }
                 }
                 catch (Exception $e)
