@@ -59,8 +59,6 @@ class BackendController extends BaseController {
     {
         $files = File::files(app_path() . '/resources/historical_lists');
 
-        $daily_summaries = [];
-
         $summaries = DB::table('summaries')->select('symbol')->groupBy('symbol')->get();
 
         $symbols = array_pluck($summaries, 'symbol');
@@ -84,9 +82,8 @@ class BackendController extends BaseController {
                 if ($daily_summary[0] !== 'Date')
                 {
                     $daily_summary[7] = basename($file, '.csv');
+                    $daily_summaries[] = $daily_summary;
                 }
-
-                $daily_summaries[] = $daily_summary;
             }
 
             fclose($handle);
