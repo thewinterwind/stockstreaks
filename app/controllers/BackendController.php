@@ -108,6 +108,7 @@ class BackendController extends BaseController {
                     );
                 }
             }
+            print 'Stored historical data for: ' . $symbol . PHP_EOL;
         }
 
         return 'done';

@@ -33,7 +33,7 @@ class StockController extends BaseController {
             fclose($handle);
         }
 
-        echo count($stocks) . ' to create<br/>';
+        echo count($stocks) . ' to create' . PHP_EOL;
 
         foreach ($stocks as $stock)
         {
@@ -52,7 +52,7 @@ class StockController extends BaseController {
                 ]
             );
 
-            echo 'created stock: ' . $row->id . '<br/>';
+            echo 'created stock: ' . $row->id  . PHP_EOL;
         }
     }
 
