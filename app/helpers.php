@@ -5,7 +5,7 @@ if (!function_exists('pp'))
     function pp($value)
     {
         echo '<pre>';
-        print_r($value);
+        var_dump($value);
     }
 }
 

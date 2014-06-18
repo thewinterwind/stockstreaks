@@ -4,6 +4,9 @@ class StoringController extends BaseController {
 
     public function store_streak()
     {
+        ini_set("memory_limit", "-1");
+        set_time_limit(0);
+
         $date = date('Y-m-d');
 
         $stocks = DB::table('stocks')->select('symbol')->orderBy('symbol', 'desc')->get();
@@ -11,7 +14,7 @@ class StoringController extends BaseController {
         foreach ($stocks as $stock)
         {
             $days = DB::table('summaries')
-                ->select(['close', 'symbol'])
+                ->select('close')
                 ->where('symbol', $stock->symbol)
                 ->orderBy('date', 'desc')
                 ->limit(15)
@@ -24,7 +27,7 @@ class StoringController extends BaseController {
                 ->where('streak_stored', $date)
                 ->first();
 
-            if ( ! $stored)
+            if (is_null($stored))
             {
                 for ($i = 0; $i < count($days); $i++)
                 {
@@ -33,6 +36,13 @@ class StoringController extends BaseController {
 
                     // if the next days price is the same as the current, the streak is over
                     if ($days[$i]->close === $days[$i + 1]->close) break;
+
+                    // one time check for the first iteration
+                    if ($i === 0)
+                    {
+                        if ($days[$i] > $days[$i + 1]) $i++; break;
+                        if ($days[$i] < $days[$i + 1]) $i--; break;
+                    }
 
                     // check if the winning streak is over or not
                     if ($streak > 0)
