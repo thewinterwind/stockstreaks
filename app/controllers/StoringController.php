@@ -40,8 +40,15 @@ class StoringController extends BaseController {
                 // one time check for the first iteration
                 if ($i === 0)
                 {
-                    if ($days[$i] > $days[$i + 1]) $streak++; continue;
-                    if ($days[$i] < $days[$i + 1]) $streak--; continue;
+                    if ($days[$i] > $days[$i + 1])
+                    {
+                        $streak++; continue;
+                    }
+
+                    if ($days[$i] < $days[$i + 1])
+                    {
+                        $streak--; continue;
+                    }
                 }
 
                 // check if the winning streak is over or not
