@@ -6,55 +6,53 @@ class StoringController extends BaseController {
     {
         $date = date('Y-m-d');
 
-        $stocks = DB::table('stocks')->select('symbol')->orderBy('symbol', 'desc')->get();
+        $stocks = DB::table('stocks')->select('symbol')->orderBy('symbol', 'asc')->get();
 
         foreach ($stocks as $stock)
         {
             $days = DB::table('summaries')
-                ->select(['date', 'close', 'symbol'])
+                ->select(['close', 'symbol'])
                 ->where('symbol', $stock->symbol)
                 ->orderBy('date', 'desc')
                 ->limit(15)
                 ->get();
 
             $streak = 0;
-            $iteration_price = null;
 
             $stored = DB::table('stocks')
                 ->where('symbol', $stock->symbol)
-                ->where('streak_stored', date('Y-m-d'))
-                ->limit(1)->get();
+                ->where('streak_stored', $date)
+                ->first();
 
             if ( ! $stored)
             {
                 for ($i = 0; $i < count($days); $i++)
                 {
+                    // if we're at the earliest day recorded for a stock, the streak is over
+                    if ( ! isset($days[$i + 1])) break;
+
                     // if the next days price is the same as the current, the streak is over
                     if ($days[$i + 1]->close === $days[$i]->close) break;
 
-                    // if it's not the first iteration, check if the streak is over or not
-                    if (! is_null($iteration_price))
+                    // check if the winning streak is over or not
+                    if ($streak > 0)
                     {
-                        if ( $streak > 0 && $days[$i + 1]->close > $iteration_price ||
-                             $streak < 0 && $days[$i + 1]->close < $iteration_price
-                        ) break;
-                    }
-
-                    if ($days[$i + 1]->close > $days[$i]->close)
-                    {
-                        // the losing streak continues
-                        $streak--;
-                    }
-                    elseif ($days[$i + 1]->close < $days[$i]->close)
-                    {
+                        // the streak is over
+                        if ($days[$i + 1]->close > $days[$i]) break;
+                        
                         // the winning streak continues
                         $streak++;
                     }
 
-                    // store the next's days closing price
-                    // on the following iteration, this price will be the current day price
-                    // and we will compare against the new next day price
-                    $iteration_price = $days[$i + 1]->close;
+                    // check if the losing streak is over or not
+                    if ($streak < 0)
+                    {
+                        // the streak is over
+                        if ($days[$i + 1]->close < $days[$i]) break;
+                        
+                        // the losing streak continues
+                        $streak--;
+                    }
                 }
 
                 DB::table('stocks')
