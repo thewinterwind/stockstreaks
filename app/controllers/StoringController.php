@@ -6,7 +6,7 @@ class StoringController extends BaseController {
     {
         $date = date('Y-m-d');
 
-        $stocks = DB::table('stocks')->select('symbol')->orderBy('symbol', 'asc')->get();
+        $stocks = DB::table('stocks')->select('symbol')->orderBy('symbol', 'desc')->get();
 
         foreach ($stocks as $stock)
         {
@@ -32,23 +32,21 @@ class StoringController extends BaseController {
                     if ( ! isset($days[$i + 1])) break;
 
                     // if the next days price is the same as the current, the streak is over
-                    if ($days[$i + 1]->close === $days[$i]->close) break;
+                    if ($days[$i]->close === $days[$i + 1]->close) break;
 
                     // check if the winning streak is over or not
                     if ($streak > 0)
                     {
-                        // the streak is over
-                        if ($days[$i + 1]->close > $days[$i]) break;
+                        // if current day's close is less than the day before it, the winning streak is over
+                        if ($days[$i]->close < $days[$i + 1]->close) break;
                         
                         // the winning streak continues
                         $streak++;
                     }
-
-                    // check if the losing streak is over or not
-                    if ($streak < 0)
+                    elseif ($streak < 0)
                     {
-                        // the streak is over
-                        if ($days[$i + 1]->close < $days[$i]) break;
+                        // if the current day's close is more than the day before it, the losing streak is over
+                        if ($days[$i]->close > $days[$i + 1]->close) break;
                         
                         // the losing streak continues
                         $streak--;
