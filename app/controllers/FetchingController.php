@@ -48,7 +48,7 @@ public function fetch_stock_history()
         if ( ! file_exists(app_path() . '/resources/lists_demo/' . $stock->symbol . '.csv'))
         {
             try {
-                $stock_data = file_get_contents('//ichart.finance.yahoo.com/table.csv?s=' . $stock->symbol);
+                $stock_data = file_get_contents('http://ichart.finance.yahoo.com/table.csv?s=' . $stock->symbol);
             } catch (Exception $e) {
                 print $e->getMessage() . EOL;
             }
