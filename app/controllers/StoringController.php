@@ -57,9 +57,11 @@ class StoringController extends BaseController {
                     $iteration_price = $days[$i + 1]->close;
                 }
 
-                DB::table('table')
+                DB::table('stocks')
                     ->where('symbol', $stock->symbol)
                     ->update(['streak_stored' => $date]);
+
+                print "Stored streak for: " . $streak->symbol . EOL;
             }
         }
     }
