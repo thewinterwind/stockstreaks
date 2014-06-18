@@ -4,7 +4,7 @@ class StoringController extends BaseController {
 
     public function store_streak()
     {
-        $date = new Datetime;
+        $date = date('Y-m-d');
 
         $stocks = DB::table('stocks')->select('symbol')->get();
 
@@ -22,8 +22,7 @@ class StoringController extends BaseController {
 
             $stored = DB::table('stocks')
                 ->where('symbol', $stock->symbol)
-                ->where('updated_at', $date)
-                ->where('streak_stored', 1)
+                ->where('streak_stored', date('Y-m-d'))
                 ->limit(1)->get();
 
             if ( ! $stored)
@@ -60,7 +59,7 @@ class StoringController extends BaseController {
 
                 DB::table('table')
                     ->where('symbol', $stock->symbol)
-                    ->update(['streak' => $streak, 'updated_at' => $date]);
+                    ->update(['streak_stored' => $date]);
             }
         }
     }
