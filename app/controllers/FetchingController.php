@@ -38,33 +38,33 @@ public function fetch_stock_history()
     ini_set("memory_limit", "-1");
     set_time_limit(0);
 
+    $date = date('Y-m-d');
+
     $stocks = DB::table('stocks')
         ->select('symbol')
         ->where('symbol', 'NOT LIKE', '%^%')
         ->where('symbol', 'NOT LIKE', '%/%')
+        ->where('history_downloaded', '!=', $date)
         ->orderBy('symbol', 'asc')
         ->get();
 
     foreach ($stocks as $stock) {
-        if ( ! file_exists(app_path() . '/resources/lists_demo/' . $stock->symbol . '.csv'))
-        {
-            try {
-                $stock_data = file_get_contents('http://ichart.finance.yahoo.com/table.csv?s=' . $stock->symbol);
-            } catch (Exception $e) {
-                print $e->getMessage() . EOL;
-            }
-
-            $bytes = file_put_contents(
-                app_path() . '/resources/lists_demo/' . $stock->symbol . '.csv', 
-                $stock_data
-            );
-            
-            if ($bytes) print 'Stored csv for: ' . $stock->symbol . ' (' . $bytes .  ' bytes)' . PHP_EOL;
-
-            DB::table('stocks')
-                ->where('symbol', $stock->symbol)
-                ->update(['history_updated' => new Date('Y-m-d')]);
+        try {
+            $stock_data = file_get_contents('http://ichart.finance.yahoo.com/table.csv?s=' . $stock->symbol);
+        } catch (Exception $e) {
+            print $e->getMessage() . EOL;
         }
+
+        $bytes = file_put_contents(
+            app_path() . '/resources/lists_demo/' . $stock->symbol . '.csv', 
+            $stock_data
+        );
+        
+        if ($bytes) print 'Stored csv for: ' . $stock->symbol . ' (' . $bytes .  ' bytes)' . PHP_EOL;
+
+        DB::table('stocks')
+            ->where('symbol', $stock->symbol)
+            ->update(['history_downloaded' => $date]);
     }
 }
 
