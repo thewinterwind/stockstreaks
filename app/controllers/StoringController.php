@@ -61,7 +61,6 @@ class StoringController extends BaseController {
                 DB::table('table')
                     ->where('symbol', $stock->symbol)
                     ->update(['streak' => $streak, 'updated_at' => $date]);
-                }
             }
         }
     }

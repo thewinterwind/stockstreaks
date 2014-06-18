@@ -35,15 +35,14 @@ public function fetch_stock_data()
 
 public function fetch_stock_history()
 {
-    ini_set("memory_limit", "-1");
     set_time_limit(0);
 
     $date = date('Y-m-d');
 
     $stocks = DB::table('stocks')
         ->select('symbol')
-        ->where('symbol', 'NOT LIKE', '%^%')
-        ->where('symbol', 'NOT LIKE', '%/%')
+        ->where('symbol', 'NOT LIKE', '%^%') // some stocks have ^ in them (not doing these now)
+        ->where('symbol', 'NOT LIKE', '%/%') // some stocks have / in them (not doing these now)
         ->where('history_downloaded', '!=', $date)
         ->orderBy('symbol', 'asc')
         ->get();
@@ -62,6 +61,7 @@ public function fetch_stock_history()
         
         if ($bytes) print 'Stored csv for: ' . $stock->symbol . ' (' . $bytes .  ' bytes)' . PHP_EOL;
 
+        // store the date to confirm it was dl'd, if the script fails midway we can pick up from last time
         DB::table('stocks')
             ->where('symbol', $stock->symbol)
             ->update(['history_downloaded' => $date]);
