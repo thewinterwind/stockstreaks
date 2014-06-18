@@ -4,7 +4,7 @@ class StoringController extends BaseController {
 
     public function store_streak()
     {
-        $date = new Date;
+        $date = new Datetime;
 
         $stocks = DB::table('stocks')->select('symbol')->get();
 
