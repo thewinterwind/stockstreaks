@@ -6,7 +6,7 @@ class StoringController extends BaseController {
     {
         $date = date('Y-m-d');
 
-        $stocks = DB::table('stocks')->select('symbol')->get();
+        $stocks = DB::table('stocks')->select('symbol')->orderBy('symbol', 'desc')->get();
 
         foreach ($stocks as $stock)
         {
@@ -59,9 +59,14 @@ class StoringController extends BaseController {
 
                 DB::table('stocks')
                     ->where('symbol', $stock->symbol)
-                    ->update(['streak_stored' => $date]);
+                    ->update(
+                        [
+                            'streak' => $streak,
+                            'streak_stored' => $date,
+                        ]
+                    );
 
-                print "Stored streak for: " . $stock->symbol . "\n";
+                print "Stored a streak of " . $streak . " for: " . $stock->symbol . "\n";
             }
         }
     }
