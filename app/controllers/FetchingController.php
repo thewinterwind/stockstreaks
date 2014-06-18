@@ -1,8 +1,8 @@
 <?php
 
-class APIController extends BaseController {
+class FetchingController extends BaseController {
 
-public function get_stock_data()
+public function fetch_stock_data()
 {
     // fetch stock from query string
     $stock = Input::get('stock');
@@ -33,7 +33,7 @@ public function get_stock_data()
     pp( Cache::get($cache_key) );
 }
 
-public function fetch_historical_stock_data()
+public function fetch_stock_history()
 {
     ini_set("memory_limit", "-1");
     set_time_limit(0);
@@ -45,7 +45,7 @@ public function fetch_historical_stock_data()
         ->get();
 
     foreach ($stocks as $stock) {
-        if (!file_exists(app_path() . '/resources/lists_demo/' . $stock->symbol . '.csv'))
+        if ( ! file_exists(app_path() . '/resources/lists_demo/' . $stock->symbol . '.csv'))
         {
             try {
                 $stock_data = file_get_contents('//ichart.finance.yahoo.com/table.csv?s=' . $stock->symbol);
@@ -59,6 +59,8 @@ public function fetch_historical_stock_data()
             );
             
             if ($bytes) print 'Stored csv for: ' . $stock->symbol . ' (' . $bytes .  ' bytes)' . PHP_EOL;
+
+            DB::table('stocks')->where('symbol', $stock->symbol)->update(['have_history' => 1]);
         }
     }
 }

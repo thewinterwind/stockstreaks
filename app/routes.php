@@ -5,15 +5,15 @@
 
 Route::get('/', 'StockController@index');
 
-Route::get('fetch', 'APIController@get_stock_data');
+// Routes for fetching data
+Route::get('fetch', 'FetchingController@fetch_stock_data');
+Route::get('fetch_historical', 'FetchingController@fetch_stock_history');
 
-Route::get('store', 'StockController@store');
+// Routes for storing data
+Route::get('store_streak', 'StoringController@store_streak');
+Route::get('store_historical', 'StoringController@store_stock_history');
+Route::get('store_summary', 'StockController@store_stock_summary');
 
-Route::get('fetch_historical', 'APIController@fetch_historical_stock_data');
-
-Route::get('store_historical', 'BackendController@store_historical_data');
-
-Route::get('store_streak', 'BackendController@store_streak');
 
 // AJAX routes
 Route::get('ajax/stock_data', 'AjaxController@stock_data');

@@ -11,7 +11,7 @@ class StockController extends BaseController {
         return View::make('stocks.index', $data);
     }
 
-    public function store()
+    public function store_stock_data()
     {
         $files = File::files(app_path() . '/resources/stock_lists');
 

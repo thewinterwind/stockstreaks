@@ -1,12 +1,10 @@
 <?php
 
-class BackendController extends BaseController {
+class StoringController extends BaseController {
 
     public function store_streak()
     {
         $date = new Date;
-
-        die;
 
         $stocks = DB::table('stocks')->select('symbol')->get();
 
@@ -68,11 +66,64 @@ class BackendController extends BaseController {
         }
     }
 
-    public function store_historical_data()
+    public function store_stock_summary()
+    {
+        $files = File::files(app_path() . '/resources/stock_lists');
+
+        $stocks = [];
+
+        foreach ($files as $file)
+        {
+            $handle = fopen($file, "r");
+
+            while( ! feof($handle))
+            {
+                $stock = fgetcsv($handle);
+
+                $stock[9] = basename($file, '.csv');
+
+                if (count($stock) == 10)
+                {
+                    $stocks[] = $stock;
+                }
+                
+            }
+
+            fclose($handle);
+        }
+
+        echo count($stocks) . ' to create' . PHP_EOL;
+
+        foreach ($stocks as $stock)
+        {
+            $row = Stock::create(
+                [
+                    'symbol' => $stock[0],
+                    'name' => $stock[1],
+                    'exchange' => $stock[9],
+                    'ipo_year' => $stock[5],
+                    'sector' => $stock[6],
+                    'industry' => $stock[7],
+                    'last_sale' => $stock[2],
+                    'market_cap' => $stock[3],
+                    'summary_link' => $stock[8],
+                    'updated_at' => new Datetime,
+                ]
+            );
+
+            echo 'created stock: ' . $row->id  . PHP_EOL;
+        }
+    }
+
+    public function store_stock_history()
     {
         $files = File::files(app_path() . '/resources/historical_lists');
 
-        $summaries = DB::table('summaries')->select('symbol')->groupBy('symbol')->get();
+        $summaries = DB::table('summaries')
+            ->select('symbol')
+            ->where('updated_history', date('Y-m-d'))
+            ->groupBy('symbol')
+            ->get();
 
         $symbols = array_pluck($summaries, 'symbol');
 
