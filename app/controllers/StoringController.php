@@ -61,7 +61,7 @@ class StoringController extends BaseController {
                     ->where('symbol', $stock->symbol)
                     ->update(['streak_stored' => $date]);
 
-                print "Stored streak for: " . $stock->symbol . EOL;
+                print "Stored streak for: " . $stock->symbol . "\n";
             }
         }
     }
