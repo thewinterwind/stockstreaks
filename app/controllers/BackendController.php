@@ -4,6 +4,10 @@ class BackendController extends BaseController {
 
     public function store_streak()
     {
+        $date = new Date;
+
+        die;
+
         $stocks = DB::table('stocks')->select('symbol')->get();
 
         foreach ($stocks as $stock)
@@ -12,46 +16,55 @@ class BackendController extends BaseController {
                 ->select(['date', 'close', 'symbol'])
                 ->where('symbol', $stock->symbol)
                 ->orderBy('date', 'desc')
-                ->limit(20)
+                ->limit(15)
                 ->get();
 
             $streak = 0;
             $iteration_price = null;
 
-            for ($i = 0; $i < count($days); $i++)
+            $stored = DB::table('stocks')
+                ->where('symbol', $stock->symbol)
+                ->where('updated_at', $date)
+                ->where('streak_stored', 1)
+                ->limit(1)->get();
+
+            if ( ! $stored)
             {
-                // if the next days price is the same as the current, the streak is over
-                if ($days[$i + 1]->close === $days[$i]->close) break;
-
-                // if it's not the first iteration, check if the streak is over or not
-                if (! is_null($iteration_price))
+                for ($i = 0; $i < count($days); $i++)
                 {
-                    if ( $streak > 0 && $days[$i + 1]->close > $iteration_price ||
-                         $streak < 0 && $days[$i + 1]->close < $iteration_price
-                    ) break;
+                    // if the next days price is the same as the current, the streak is over
+                    if ($days[$i + 1]->close === $days[$i]->close) break;
+
+                    // if it's not the first iteration, check if the streak is over or not
+                    if (! is_null($iteration_price))
+                    {
+                        if ( $streak > 0 && $days[$i + 1]->close > $iteration_price ||
+                             $streak < 0 && $days[$i + 1]->close < $iteration_price
+                        ) break;
+                    }
+
+                    if ($days[$i + 1]->close > $days[$i]->close)
+                    {
+                        // the losing streak continues
+                        $streak--;
+                    }
+                    elseif ($days[$i + 1]->close < $days[$i]->close)
+                    {
+                        // the winning streak continues
+                        $streak++;
+                    }
+
+                    // store the next's days closing price
+                    // on the following iteration, this price will be the current day price
+                    // and we will compare against the new next day price
+                    $iteration_price = $days[$i + 1]->close;
                 }
 
-                if ($days[$i + 1]->close > $days[$i]->close)
-                {
-                    // the losing streak continues
-                    $streak--;
+                DB::table('table')
+                    ->where('symbol', $stock->symbol)
+                    ->update(['streak' => $streak, 'updated_at' => $date]);
                 }
-                elseif ($days[$i + 1]->close < $days[$i]->close)
-                {
-                    // the winning streak continues
-                    $streak++;
-                }
-
-                // store the next's days closing price
-                // on the following iteration, this price will be the current day price
-                // and we will compare against the new next day price
-                $iteration_price = $days[$i + 1]->close;
             }
-
-            Stock::where('symbol', $stock->symbol)->update([
-                'streak' => $streak,
-                'updated_at' => new Datetime,
-            ]);
         }
     }
 
