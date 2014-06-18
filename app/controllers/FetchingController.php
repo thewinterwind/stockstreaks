@@ -42,6 +42,7 @@ public function fetch_stock_history()
         ->select('symbol')
         ->where('symbol', 'NOT LIKE', '%^%')
         ->where('symbol', 'NOT LIKE', '%/%')
+        ->orderBy('symbol', 'asc')
         ->get();
 
     foreach ($stocks as $stock) {
