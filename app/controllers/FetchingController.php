@@ -61,7 +61,9 @@ public function fetch_stock_history()
             
             if ($bytes) print 'Stored csv for: ' . $stock->symbol . ' (' . $bytes .  ' bytes)' . PHP_EOL;
 
-            DB::table('stocks')->where('symbol', $stock->symbol)->update(['have_history' => 1]);
+            DB::table('stocks')
+                ->where('symbol', $stock->symbol)
+                ->update(['history_updated' => new Date('Y-m-d')]);
         }
     }
 }
