@@ -29,6 +29,10 @@ class AjaxController extends Controller {
                 'dt' => 3
             ],
             [
+                'db' => 'move_percentage',
+                'dt' => 3
+            ],
+            [
                 'db' => 'name',
                 'dt' => 4
             ],

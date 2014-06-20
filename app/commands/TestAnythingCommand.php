@@ -37,21 +37,21 @@ class TestAnythingCommand extends Command {
 	 */
 	public function fire()
 	{
-        $symbol = $this->argument('symbol');
-        $streak = (int) str_replace('n', '-', $this->argument('streak'));
-
-        // $result = (new \SS\Stock\Stock)->calculateMovePercentage('ZX', -4);
-		$result = (new \SS\Stock\Stock)->calculateMovePercentage($symbol, $streak);
+		$result = DB::table('summaries')
+            ->select('date')
+            ->orderBy('date', 'desc')
+            ->limit(1)
+            ->first();
 
         dd($result);
 	}
 
-    protected function getArguments()
-    {
-        return array(
-            array('symbol', InputArgument::OPTIONAL, 'Symbol name'),
-            array('streak', InputArgument::OPTIONAL, 'Streak amount'),
-        );
-    }
+    // protected function getArguments()
+    // {
+    //     return array(
+    //         array('symbol', InputArgument::OPTIONAL, 'Symbol name'),
+    //         array('streak', InputArgument::OPTIONAL, 'Streak amount'),
+    //     );
+    // }
 
 }

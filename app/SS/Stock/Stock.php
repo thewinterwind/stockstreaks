@@ -12,7 +12,11 @@ class Stock {
 
     public function updateStreaks($forcedUpdate)
     {
-        $date = date('Y-m-d');
+        $date = DB::table('summaries')
+                ->select('date')
+                ->orderBy('date', 'desc')
+                ->limit(1)
+                ->first()->date;
 
         $stocks = DB::table('stocks')->select('symbol')->orderBy('symbol', 'asc')->get();
 
@@ -26,7 +30,7 @@ class Stock {
             if ($stored && !$forcedUpdate) continue;
                 
             $days = DB::table('summaries')
-                ->select('close')
+                ->select('close', 'volume')
                 ->where('symbol', $stock->symbol)
                 ->orderBy('date', 'desc')
                 ->limit(20)
@@ -77,11 +81,14 @@ class Stock {
 
             $amount = $this->calculateMovePercentage($stock->symbol, $streak);
 
+            $volume = $this->calculateStreakVolume($days, $streak);
+
             DB::table('stocks')
                 ->where('symbol', $stock->symbol)
                 ->update([
                     'streak' => $streak,
                     'move_percentage' => $amount,
+                    'streak_volume' => $volume,
                     'streak_stored' => $date,
                 ]);
 
@@ -89,6 +96,19 @@ class Stock {
         }
 
         print "\nCompleted storing streaks.\n";
+    }
+
+    public function calculateStreakVolume(array $days, $streak)
+    {
+        $daysOnStreak = array_slice($days, 0, $streak);
+
+        $volume = 0;
+
+        foreach ($daysOnStreak as $day) {
+            $volume += $day->volume;
+        }
+
+        return $volume;
     }
 
     public function calculateMovePercentage($symbol, $streak)
@@ -101,8 +121,6 @@ class Stock {
                     ->limit(abs($streak) + 1) // The math: MOST_RECENT_DATE price over $streak + 1 price
                     ->orderBy('date', 'desc')
                     ->get();
-
-        var_dump($closes);
 
         return round(($closes[0]->close / end($closes)->close - 1) * 100, 2);
     }

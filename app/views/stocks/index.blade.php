@@ -10,6 +10,7 @@
                 <th>Symbol</th>
                 <th>Streak</th>
                 <th>Move %</th>
+                <th>Volume</th>
                 <th>Name</th>
                 <th>Exchange</th>
                 <th>Sector</th>
@@ -22,6 +23,7 @@
                 <th>Symbol</th>
                 <th>Streak</th>
                 <th>Move %</th>
+                <th>Volume</th>
                 <th>Name</th>
                 <th>Exchange</th>
                 <th>Sector</th>
