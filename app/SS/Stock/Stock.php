@@ -98,11 +98,13 @@ class Stock {
             $closes = DB::table('summaries')
                         ->where('symbol', $symbol)
                         ->select('close')
-                        ->limit($streak + 1) // The math: MOST_RECENT_DATE price over $streak + 1 price
+                        ->limit(abs($streak) + 1) // The math: MOST_RECENT_DATE price over $streak + 1 price
                         ->orderBy('date', 'desc')
                         ->get();
 
-            return round($closes[0]->close / end($closes)->close);
+            $float = round($closes[0]->close / end($closes)->close, 2);
+
+            return $streak < 0 ? $float * -1 : $float;
         }
 
         return 0;

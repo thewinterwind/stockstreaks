@@ -18,7 +18,7 @@ class UpdateStreaksCommand extends Command {
 	 *
 	 * @var string
 	 */
-	protected $description = 'Update the stock streaks';
+	protected $description = 'Update stock streaks and move percentage';
 
 	/**
 	 * Create a new command instance.
