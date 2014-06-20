@@ -133,17 +133,16 @@ class StoringController extends BaseController {
         }
     }
 
-    // This function will insert 20 million rows into DB! Sweet!
     public function store_stock_history()
     {
         // $date = date('Y-m-d');
         $date = '2014-06-16';
 
-        $files = File::files(app_path() . '/resources/historical_lists');
+        $files = File::files(app_path() . '/resources/historical_lists/' . '2014-06-20'); // change it
 
         $completed_stocks = DB::table('stocks')
             ->select('symbol')
-            ->where('history_updated', $date)
+            ->where('history_updated', '2014-06-20') // change it
             ->groupBy('symbol')
             ->orderBy('symbol', 'asc')
             ->get();
@@ -167,8 +166,8 @@ class StoringController extends BaseController {
                 // 2. continue to next iteration if there isn't seven elements (invalid record)
                 if ($summary[0] == 'Date' || count($summary) !== 7) continue;
 
-                // if the date is less than today, we've already stored it, break out of the file
-                if (remove_whitespace($summary[0]) < $date) break;
+                // if the date is less than today, we've already stored it, break out of the loop
+                if (remove_whitespace($summary[0]) < $date) break; // change it
 
                 DB::table('summaries_demo')->insert([
                     'date'   => remove_whitespace($summary[0]),
@@ -193,9 +192,9 @@ class StoringController extends BaseController {
                     'history_updated' => $date,
                 ]);
 
-            print "------------------------------------------------". PHP_EOL;
-            print "Inserted: " . $symbol . ". Date: " . $summary[0] . PHP_EOL;
-            print "------------------------------------------------". PHP_EOL;
+            print "-----------------------------------". PHP_EOL;
+            print "Finished inserting for: " . $symbol . PHP_EOL;
+            print "-----------------------------------". PHP_EOL;
         }
     }
 
