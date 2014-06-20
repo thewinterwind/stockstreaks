@@ -1,4 +1,6 @@
-<?php namespace SS\Stocks;
+<?php namespace SS\Stock;
+
+use DB, File, Cache;
 
 class Stock {
 
@@ -8,7 +10,7 @@ class Stock {
         set_time_limit(0);
     }
 
-    public function store_streaks()
+    public function store_streaks($forcedUpdate)
     {
         $date = date('Y-m-d');
 
@@ -21,7 +23,7 @@ class Stock {
                 ->where('streak_stored', $date)
                 ->first();
 
-            if ($stored) continue;
+            if ($stored && !$forcedUpdate) continue;
                 
             $days = DB::table('summaries')
                 ->select('close')
@@ -80,10 +82,29 @@ class Stock {
                     'streak_stored' => $date,
                 ]);
 
+            $this->calculateMovePercentage($stock->symbol, $streak);
+
             print "Stored a streak of " . $streak . " for: " . $stock->symbol . "\n";
         }
 
         print "\nCompleted storing streaks.\n";
+    }
+
+    public function calculateMovePercentage($symbol, $streak)
+    {
+        if ($streak !== 0)
+        {
+            $closes = DB::table('summaries')
+                        ->where('symbol', $symbol)
+                        ->select('close')
+                        ->limit($streak + 1) // The math: MOST_RECENT_DATE price over $streak + 1 price
+                        ->orderBy('date', 'desc')
+                        ->get();
+
+            return round($closes[0]->close / end($closes)->close);
+        }
+
+        return 0;
     }
 
     public function store_stock_summary()

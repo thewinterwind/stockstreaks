@@ -4,21 +4,21 @@ use Illuminate\Console\Command;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
 
-class UpdateStreaksCommand extends Command {
+class TestAnythingCommand extends Command {
 
 	/**
 	 * The console command name.
 	 *
 	 * @var string
 	 */
-	protected $name = 'ss:update-streaks';
+	protected $name = 'test';
 
 	/**
 	 * The console command description.
 	 *
 	 * @var string
 	 */
-	protected $description = 'Update the stock streaks';
+	protected $description = 'Test anything';
 
 	/**
 	 * Create a new command instance.
@@ -37,21 +37,7 @@ class UpdateStreaksCommand extends Command {
 	 */
 	public function fire()
 	{
-        $force = $this->argument('force');
-
-		(new \SS\Stock\Stock)->store_streaks($force);
+		(new \SS\Stock\Stock)->calculateMovePercentage('A', 1);
 	}
-
-    /**
-     * Get the console command arguments.
-     *
-     * @return array
-     */
-    protected function getArguments()
-    {
-        return array(
-            array('force', InputArgument::OPTIONAL, 'Whether or not to force an update'),
-        );
-    }
 
 }
