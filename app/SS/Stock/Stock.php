@@ -92,7 +92,8 @@ class Stock {
                     'streak_stored' => $date,
                 ]);
 
-            print "Stored a streak of " . $streak . " (" . $amount . ") for: " . $stock->symbol . "\n";
+            print "Symbol: " . $stock->symbol . " # Streak: " . $streak . " # ";
+            print "Amount: " . $amount        . " # Volume: " . $volume . "\n";
         }
 
         print "\nCompleted storing streaks.\n";
