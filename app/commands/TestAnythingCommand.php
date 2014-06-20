@@ -37,11 +37,7 @@ class TestAnythingCommand extends Command {
 	 */
 	public function fire()
 	{
-		$result = DB::table('summaries')
-            ->select('date')
-            ->orderBy('date', 'desc')
-            ->limit(1)
-            ->first();
+		
 
         dd($result);
 	}
