@@ -37,7 +37,8 @@ class TestAnythingCommand extends Command {
 	 */
 	public function fire()
 	{
-		$result = (new \SS\Stock\Stock)->calculateMovePercentage('ZX', -4);
+        // $result = (new \SS\Stock\Stock)->calculateMovePercentage('ZX', -4);
+		$result = (new \SS\Stock\Stock)->calculateMovePercentage('WAGE', 5); // 1.268
 
         dd($result);
 	}

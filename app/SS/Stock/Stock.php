@@ -102,9 +102,9 @@ class Stock {
                         ->orderBy('date', 'desc')
                         ->get();
 
-            $float = round($closes[0]->close / end($closes)->close, 2);
+            $percentageMoment = round(($closes[0]->close / end($closes)->close - 1) * 100, 2);
 
-            return $streak < 0 ? $float * -1 : $float;
+            return $streak < 0 ? $percentageMoment * -1 : $percentageMoment;
         }
 
         return 0;
