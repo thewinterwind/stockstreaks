@@ -169,7 +169,7 @@ class StoringController extends BaseController {
                 // if the date is less than today, we've already stored it, break out of the loop
                 if (remove_whitespace($summary[0]) < $date) break; // change it
 
-                DB::table('summaries_demo')->insert([
+                DB::table('summaries')->insert([
                     'date'   => remove_whitespace($summary[0]),
                     'symbol' => remove_whitespace($symbol),
                     'open'   => remove_whitespace($summary[1]),
