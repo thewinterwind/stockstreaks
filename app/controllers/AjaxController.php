@@ -29,20 +29,20 @@ class AjaxController extends Controller {
                 'dt' => 3
             ],
             [
-                'db' => 'move_percentage',
-                'dt' => 3
-            ],
-            [
-                'db' => 'name',
+                'db' => 'streak_volume',
                 'dt' => 4
             ],
             [
-                'db' => 'exchange',
+                'db' => 'name',
                 'dt' => 5
             ],
             [
-                'db' => 'sector',
+                'db' => 'exchange',
                 'dt' => 6
+            ],
+            [
+                'db' => 'sector',
+                'dt' => 7
             ],
         ];
 
