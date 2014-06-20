@@ -136,9 +136,8 @@ class StoringController extends BaseController {
     // This function will insert 20 million rows into DB! Sweet!
     public function store_stock_history()
     {
-        $date = date('Y-m-d');
-
-        set_time_limit(0);
+        // $date = date('Y-m-d');
+        $date = '2014-06-16';
 
         $files = File::files(app_path() . '/resources/historical_lists');
 
@@ -164,27 +163,26 @@ class StoringController extends BaseController {
                 // the stock's daily summary (closing price, volume, etc.)
                 $summary = fgetcsv($handle);
 
-                // insert into summaries array provided its not the header
-                if ($summary[0] !== 'Date')
-                {
-                    // validate the array by checking if it has 8 elements
-                    if (count($summary) == 7)
-                    {
-                        DB::table('summaries_demo')->insert([
-                            'date'   => $summary[0],
-                            'symbol' => $symbol,
-                            'open'   => $summary[1],
-                            'high'   => $summary[2],
-                            'low'    => $summary[3],
-                            'close'  => $summary[4],
-                            'adjusted_close' => $summary[6],
-                            'volume' => $summary[5],
-                            'updated_at' => new Datetime,
-                        ]);
+                // 1. continue to next iteration if it's the header
+                // 2. continue to next iteration if there isn't seven elements (invalid record)
+                if ($summary[0] == 'Date' || count($summary) !== 7) continue;
 
-                        print "Inserted: " . $symbol . ". Date: " . $summary[0] . PHP_EOL;
-                    }
-                }
+                // if the date is less than today, we've already stored it, break out of the file
+                if (remove_whitespace($summary[0]) < $date) break;
+
+                DB::table('summaries_demo')->insert([
+                    'date'   => remove_whitespace($summary[0]),
+                    'symbol' => remove_whitespace($symbol),
+                    'open'   => remove_whitespace($summary[1]),
+                    'high'   => remove_whitespace($summary[2]),
+                    'low'    => remove_whitespace($summary[3]),
+                    'close'  => remove_whitespace($summary[4]),
+                    'adjusted_close' => remove_whitespace($summary[6]),
+                    'volume' => remove_whitespace($summary[5]),
+                    'updated_at' => new Datetime,
+                ]);
+
+                print "Inserted: " . $symbol . ". Date: " . $summary[0] . PHP_EOL;
             }
 
             fclose($handle);
@@ -194,6 +192,10 @@ class StoringController extends BaseController {
                 ->update([
                     'history_updated' => $date,
                 ]);
+
+            print "------------------------------------------------". PHP_EOL;
+            print "Inserted: " . $symbol . ". Date: " . $summary[0] . PHP_EOL;
+            print "------------------------------------------------". PHP_EOL;
         }
     }
 

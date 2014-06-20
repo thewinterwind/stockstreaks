@@ -58,6 +58,7 @@ class FetchingController extends BaseController {
         foreach ($stocks as $stock)
         {
             $symbol = $stock->symbol;
+            
             $stock_data = @file_get_contents('http://ichart.finance.yahoo.com/table.csv?s=' . $stock->symbol);
 
             if ($stock_data)
@@ -75,7 +76,9 @@ class FetchingController extends BaseController {
                     // if the script fails midway we can pick up from last time
                     DB::table('stocks')
                         ->where('symbol', $stock->symbol)
-                        ->update(['history_downloaded' => $date]);
+                        ->update([
+                            'history_downloaded' => $date
+                        ]);
                 }
             }
         }

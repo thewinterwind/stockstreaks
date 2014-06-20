@@ -6,3 +6,6 @@ composer.lock
 .env.php
 .DS_Store
 Thumbs.db
+
+/app/resources/history/*
+/app/resources/stock_lists/*
