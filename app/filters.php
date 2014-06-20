@@ -19,7 +19,28 @@ App::before(function($request)
 
 App::after(function($request, $response)
 {
-	//
+	// Minify HTML before responding on production
+    if (App::environment() == 'production')
+    {
+        if ($response instanceof Illuminate\Http\Response)
+        {
+            $output = $response->getOriginalContent();
+            
+            $filters = array(
+                // Remove HTML comments except IE conditions
+                '/<!--(?!\s*(?:\[if [^\]]+]|<!|>))(?:(?!-->).)*-->/s' => '', 
+                // Remove comments in the form /* */
+                '/(?<!\S)\/\/\s*[^\r\n]*/' => '',
+                // Shorten multiple white spaces 
+                '/\s{2,}/' => '',
+                // Collapse new lines 
+                '/(\r?\n)/' => '', 
+            );
+            
+            $output = preg_replace(array_keys($filters), array_values($filters), $output);
+            $response->setContent($output);
+        } 
+    }
 });
 
 /*

@@ -17,3 +17,11 @@ th {
 h2 {
     font-family: monospace;
 }
+
+.pt10 {
+    padding-top: 10px;
+}
+
+.mt10 {
+    padding-top: 10px;
+}
