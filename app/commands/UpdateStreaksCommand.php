@@ -37,7 +37,7 @@ class UpdateStreaksCommand extends Command {
 	 */
 	public function fire()
 	{
-		(new StoringController)->store_streaks();
+		(new \SS\Stocks\Stock)->store_streaks();
 	}
 
 }

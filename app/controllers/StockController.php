@@ -1,6 +1,6 @@
 <?php
 
-class StockController extends BaseController {
+class StockController extends Controller {
 
     public function index()
     {

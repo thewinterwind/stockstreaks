@@ -2,7 +2,7 @@
 
 use SS\Libraries\Datatables\Datatables;
 
-class AjaxController extends BaseController {
+class AjaxController extends Controller {
 
     public function __construct(Datatables $datatables)
     {
