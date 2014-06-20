@@ -17,7 +17,7 @@
                 <th>Close</th>
                 <th>Symbol</th>
                 <th>Streak</th>
-                <th>Move %</th>
+                <th>Move&nbsp;%</th>
                 <th>Streak Volume</th>
                 <th>Name</th>
                 <th>Exchange</th>
@@ -31,7 +31,7 @@
                 <th>Symbol</th>
                 <th>Streak</th>
                 <th>Move %</th>
-                <th>Streak Volume</th>
+                <th>Streak&nbsp;Volume</th>
                 <th>Name</th>
                 <th>Exchange</th>
                 <th>Sector</th>
