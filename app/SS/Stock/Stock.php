@@ -85,7 +85,7 @@ class Stock {
                     'streak_stored' => $date,
                 ]);
 
-            print "Stored a streak of " . $streak . " (" . $amount . ") for: " . $stock->symbol . "\n";
+            print "Stored a streak of " . $streak . " (" . (string) $amount . ") for: " . $stock->symbol . "\n";
         }
 
         print "\nCompleted storing streaks.\n";
@@ -102,9 +102,9 @@ class Stock {
                         ->orderBy('date', 'desc')
                         ->get();
 
-            $percentageMoment = round(($closes[0]->close / end($closes)->close - 1) * 100, 2);
+                        var_dump($closes);
 
-            return $streak < 0 ? $percentageMoment * -1 : $percentageMoment;
+            return round(($closes[0]->close / end($closes)->close - 1) * 100, 2);
         }
 
         return 0;
