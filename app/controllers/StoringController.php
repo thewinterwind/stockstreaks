@@ -82,6 +82,8 @@ class StoringController extends BaseController {
 
             print "Stored a streak of " . $streak . " for: " . $stock->symbol . "\n";
         }
+
+        print "\nCompleted storing streaks.";
     }
 
     public function store_stock_summary()
@@ -135,14 +137,13 @@ class StoringController extends BaseController {
 
     public function store_stock_history()
     {
-        // $date = date('Y-m-d');
-        $date = '2014-06-16';
+        $date = date('Y-m-d');
 
-        $files = File::files(app_path() . '/resources/historical_lists/' . '2014-06-20'); // change it
+        $files = File::files(app_path() . '/resources/historical_lists/' . $date);
 
         $completed_stocks = DB::table('stocks')
             ->select('symbol')
-            ->where('history_updated', '2014-06-20') // change it
+            ->where('history_updated', $date)
             ->groupBy('symbol')
             ->orderBy('symbol', 'asc')
             ->get();
@@ -167,7 +168,7 @@ class StoringController extends BaseController {
                 if ($summary[0] == 'Date' || count($summary) !== 7) continue;
 
                 // if the date is less than today, we've already stored it, break out of the loop
-                if (remove_whitespace($summary[0]) < $date) break; // change it
+                if (remove_whitespace($summary[0]) < $date) break;
 
                 DB::table('summaries')->insert([
                     'date'   => remove_whitespace($summary[0]),
@@ -192,9 +193,9 @@ class StoringController extends BaseController {
                     'history_updated' => $date,
                 ]);
 
-            print "-----------------------------------". PHP_EOL;
+            print "--------------------------------". PHP_EOL;
             print "Finished inserting for: " . $symbol . PHP_EOL;
-            print "-----------------------------------". PHP_EOL;
+            print "--------------------------------". PHP_EOL;
         }
     }
 
