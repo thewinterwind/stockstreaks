@@ -6,6 +6,7 @@
     <table class="table table-bordered table-striped datatables">
         <thead>
             <tr>
+                <th>Closing Date</th>
                 <th>Symbol</th>
                 <th>Streak</th>
                 <th>Move %</th>
@@ -17,6 +18,7 @@
 
         <tfoot>
             <tr>
+                <th>Closing Date</th>
                 <th>Symbol</th>
                 <th>Streak</th>
                 <th>Move %</th>

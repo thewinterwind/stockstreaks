@@ -83,7 +83,7 @@ class StoringController extends BaseController {
             print "Stored a streak of " . $streak . " for: " . $stock->symbol . "\n";
         }
 
-        print "\nCompleted storing streaks.";
+        print "\nCompleted storing streaks.\n";
     }
 
     public function store_stock_summary()

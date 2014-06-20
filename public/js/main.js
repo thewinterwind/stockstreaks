@@ -3,6 +3,6 @@ $(document).ready(function() {
         "processing": true,
         "serverSide": true,
         "ajax": "ajax/stock_data",
-        "order": [[ 1, "desc" ]]
+        "order": [[ 2, "desc" ]]
     } );
 } );

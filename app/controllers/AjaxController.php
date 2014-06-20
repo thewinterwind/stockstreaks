@@ -13,28 +13,32 @@ class AjaxController extends BaseController {
 	{
         $columns = [
             [
-                'db' => 'symbol',
+                'db' => 'streak_stored',
                 'dt' => 0
             ],
             [
-                'db' => 'streak',
+                'db' => 'symbol',
                 'dt' => 1
             ],
             [
-                'db' => 'move_percentage',
+                'db' => 'streak',
                 'dt' => 2
             ],
             [
-                'db' => 'name',
+                'db' => 'move_percentage',
                 'dt' => 3
             ],
             [
-                'db' => 'exchange',
+                'db' => 'name',
                 'dt' => 4
             ],
             [
-                'db' => 'sector',
+                'db' => 'exchange',
                 'dt' => 5
+            ],
+            [
+                'db' => 'sector',
+                'dt' => 6
             ],
         ];
 
