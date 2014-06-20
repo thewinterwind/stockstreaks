@@ -85,7 +85,7 @@ class Stock {
                     'streak_stored' => $date,
                 ]);
 
-            print "Stored a streak of " . $streak . " (" . (string) $amount . ") for: " . $stock->symbol . "\n";
+            print "Stored a streak of " . $streak . " (" . $amount . ") for: " . $stock->symbol . "\n";
         }
 
         print "\nCompleted storing streaks.\n";
@@ -93,21 +93,16 @@ class Stock {
 
     public function calculateMovePercentage($symbol, $streak)
     {
-        if ($streak !== 0)
-        {
-            $closes = DB::table('summaries')
-                        ->where('symbol', $symbol)
-                        ->select('close')
-                        ->limit(abs($streak) + 1) // The math: MOST_RECENT_DATE price over $streak + 1 price
-                        ->orderBy('date', 'desc')
-                        ->get();
+        if ($streak == 0) return 0;
 
-                        var_dump($closes);
+        $closes = DB::table('summaries')
+                    ->where('symbol', $symbol)
+                    ->select('close')
+                    ->limit(abs($streak) + 1) // The math: MOST_RECENT_DATE price over $streak + 1 price
+                    ->orderBy('date', 'desc')
+                    ->get();
 
-            return round(($closes[0]->close / end($closes)->close - 1) * 100, 2);
-        }
-
-        return 0;
+        return round(($closes[0]->close / end($closes)->close - 1) * 100, 2);
     }
 
     public function store_stock_summary()
