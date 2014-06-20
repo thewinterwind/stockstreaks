@@ -102,6 +102,8 @@ class Stock {
                     ->orderBy('date', 'desc')
                     ->get();
 
+        var_dump($closes);
+
         return round(($closes[0]->close / end($closes)->close - 1) * 100, 2);
     }
 

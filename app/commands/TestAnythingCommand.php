@@ -37,10 +37,21 @@ class TestAnythingCommand extends Command {
 	 */
 	public function fire()
 	{
-        $result = (new \SS\Stock\Stock)->calculateMovePercentage('ZX', -4);
-		// $result = (new \SS\Stock\Stock)->calculateMovePercentage('WAGE', 5); // 1.268
+        $symbol = $this->argument('symbol');
+        $streak = (int) str_replace('n', '-', $this->argument('streak'));
+
+        // $result = (new \SS\Stock\Stock)->calculateMovePercentage('ZX', -4);
+		$result = (new \SS\Stock\Stock)->calculateMovePercentage($symbol, $streak);
 
         dd($result);
 	}
+
+    protected function getArguments()
+    {
+        return array(
+            array('symbol', InputArgument::OPTIONAL, 'Symbol name'),
+            array('streak', InputArgument::OPTIONAL, 'Streak amount'),
+        );
+    }
 
 }
