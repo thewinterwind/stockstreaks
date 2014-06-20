@@ -10,7 +10,7 @@ class Stock {
         set_time_limit(0);
     }
 
-    public function store_streaks($forcedUpdate)
+    public function updateStreaks($forcedUpdate)
     {
         $date = date('Y-m-d');
 
@@ -75,16 +75,17 @@ class Stock {
                 }
             }
 
+            $amount = $this->calculateMovePercentage($stock->symbol, $streak);
+
             DB::table('stocks')
                 ->where('symbol', $stock->symbol)
                 ->update([
                     'streak' => $streak,
+                    'move_percentage' => $amount,
                     'streak_stored' => $date,
                 ]);
 
-            $this->calculateMovePercentage($stock->symbol, $streak);
-
-            print "Stored a streak of " . $streak . " for: " . $stock->symbol . "\n";
+            print "Stored a streak of " . $streak . " (" . $amount . ") for: " . $stock->symbol . "\n";
         }
 
         print "\nCompleted storing streaks.\n";
