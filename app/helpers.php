@@ -17,3 +17,11 @@ if (!function_exists('ppd'))
         die;
     }
 }
+
+if (!function_exists('remove_whitespace'))
+{
+    function remove_whitespace($string)
+    {
+        return preg_replace('/\s+/', '', $string);
+    }
+}

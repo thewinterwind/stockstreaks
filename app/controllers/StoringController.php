@@ -2,11 +2,14 @@
 
 class StoringController extends BaseController {
 
-    public function store_streaks()
+    public function __construct()
     {
         ini_set("memory_limit", "-1");
         set_time_limit(0);
+    }
 
+    public function store_streaks()
+    {
         $date = date('Y-m-d');
 
         $stocks = DB::table('stocks')->select('symbol')->orderBy('symbol', 'asc')->get();
@@ -21,10 +24,10 @@ class StoringController extends BaseController {
             if ($stored) continue;
                 
             $days = DB::table('summaries')
-                ->select('close', 'date')
+                ->select('close')
                 ->where('symbol', $stock->symbol)
                 ->orderBy('date', 'desc')
-                ->limit(15)
+                ->limit(20)
                 ->get();
 
             $streak = 0;
@@ -113,15 +116,15 @@ class StoringController extends BaseController {
         {
             $row = Stock::create(
                 [
-                    'symbol' => $stock[0],
+                    'symbol' => remove_whitespace($stock[0]),
                     'name' => $stock[1],
-                    'exchange' => $stock[9],
-                    'ipo_year' => $stock[5],
+                    'exchange' => remove_whitespace($stock[9]),
+                    'ipo_year' => remove_whitespace($stock[5]),
                     'sector' => $stock[6],
-                    'industry' => $stock[7],
-                    'last_sale' => $stock[2],
-                    'market_cap' => $stock[3],
-                    'summary_link' => $stock[8],
+                    'industry' => remove_whitespace($stock[7]),
+                    'last_sale' => remove_whitespace($stock[2]),
+                    'market_cap' => remove_whitespace($stock[3]),
+                    'summary_link' => remove_whitespace($stock[8]),
                     'updated_at' => new Datetime,
                 ]
             );
@@ -130,52 +133,46 @@ class StoringController extends BaseController {
         }
     }
 
+    // This function will insert 20 million rows into DB! Sweet!
     public function store_stock_history()
     {
+        $date = date('Y-m-d');
+
+        set_time_limit(0);
+
         $files = File::files(app_path() . '/resources/historical_lists');
 
-        $summaries = DB::table('summaries')
+        $completed_stocks = DB::table('stocks')
             ->select('symbol')
-            ->where('updated_history', date('Y-m-d'))
+            ->where('history_updated', $date)
             ->groupBy('symbol')
+            ->orderBy('symbol', 'asc')
             ->get();
 
-        $symbols = array_pluck($summaries, 'symbol');
+        $completed_symbols = array_pluck($completed_stocks, 'symbol');
 
         foreach ($files as $file)
         {
             $symbol = basename($file, '.csv');
 
-            if (in_array($symbol, $symbols)) continue;
+            if (in_array($symbol, $completed_symbols)) continue;
 
             $handle = fopen($file, "r");
 
-            // reset the stocks summaries array with each iteration
-            $daily_summaries = [];
-
             while( ! feof($handle))
             {
-                $daily_summary = fgetcsv($handle);
+                // the stock's daily summary (closing price, volume, etc.)
+                $summary = fgetcsv($handle);
 
                 // insert into summaries array provided its not the header
-                if ($daily_summary[0] !== 'Date')
+                if ($summary[0] !== 'Date')
                 {
-                    $daily_summary[7] = basename($file, '.csv');
-                    $daily_summaries[] = $daily_summary;
-                }
-            }
-
-            fclose($handle);
-    
-            foreach($daily_summaries as $summary)
-            {
-                // validate the array by checking if it has 8 elements
-                if (count($summary) == 8)
-                {
-                    Summary::create(
-                        [
+                    // validate the array by checking if it has 8 elements
+                    if (count($summary) == 7)
+                    {
+                        DB::table('summaries_demo')->insert([
                             'date'   => $summary[0],
-                            'symbol' => $summary[7],
+                            'symbol' => $symbol,
                             'open'   => $summary[1],
                             'high'   => $summary[2],
                             'low'    => $summary[3],
@@ -183,14 +180,21 @@ class StoringController extends BaseController {
                             'adjusted_close' => $summary[6],
                             'volume' => $summary[5],
                             'updated_at' => new Datetime,
-                        ]
-                    );
+                        ]);
+
+                        print "Inserted: " . $symbol . ". Date: " . $summary[0] . PHP_EOL;
+                    }
                 }
             }
-            print 'Stored historical data for: ' . $symbol . PHP_EOL;
-        }
 
-        return 'done';
+            fclose($handle);
+
+            DB::table('stocks')
+                ->where('symbol', $symbol)
+                ->update([
+                    'history_updated' => $date,
+                ]);
+        }
     }
 
 }

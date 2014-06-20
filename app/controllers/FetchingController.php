@@ -36,6 +36,7 @@ public function fetch_stock_data()
 public function fetch_stock_history()
 {
     set_time_limit(0);
+    ini_set("memory_limit", "-1");
 
     $date = date('Y-m-d');
 
@@ -47,24 +48,29 @@ public function fetch_stock_history()
         ->orderBy('symbol', 'asc')
         ->get();
 
-    foreach ($stocks as $stock) {
-        try {
-            $stock_data = file_get_contents('http://ichart.finance.yahoo.com/table.csv?s=' . $stock->symbol);
-        } catch (Exception $e) {
-            print $e->getMessage() . EOL;
+    foreach ($stocks as $stock)
+    {
+        $symbol = $stock->symbol;
+        $stock_data = @file_get_contents('http://ichart.finance.yahoo.com/table.csv?s=' . $stock->symbol);
+
+        if ($stock_data)
+        {
+            $bytes = file_put_contents(
+                app_path() . '/resources/lists_demo/' . $stock->symbol . '.csv', 
+                $stock_data
+            );
+
+            if ($bytes)
+            {
+                print 'Stored csv for: ' . $stock->symbol . ' (' . $bytes .  ' bytes)' . PHP_EOL;
+
+                // store the date to confirm it was dl'd, if the script fails midway we can pick up from last time
+                DB::table('stocks')
+                    ->where('symbol', $stock->symbol)
+                    ->update(['history_downloaded' => $date]);
+                }
+            }
         }
-
-        $bytes = file_put_contents(
-            app_path() . '/resources/lists_demo/' . $stock->symbol . '.csv', 
-            $stock_data
-        );
-        
-        if ($bytes) print 'Stored csv for: ' . $stock->symbol . ' (' . $bytes .  ' bytes)' . PHP_EOL;
-
-        // store the date to confirm it was dl'd, if the script fails midway we can pick up from last time
-        DB::table('stocks')
-            ->where('symbol', $stock->symbol)
-            ->update(['history_downloaded' => $date]);
     }
 }
 
