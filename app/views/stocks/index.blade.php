@@ -5,7 +5,7 @@
     <div class="row">
         <div class="col-md-12 col-lg-12 pt10">
             <a href="//www.bluehost.com/track/economical/" target="_blank">
-                <img class="center-block" border="0" src="//bluehost-cdn.com/media/partner/images/economical/760x80/bh-760x80-02-dy.png">
+                <img class="text-center" border="0" src="//bluehost-cdn.com/media/partner/images/economical/760x80/bh-760x80-02-dy.png">
             </a>
         </div>
     </div>

@@ -10,7 +10,14 @@ class Stock {
         set_time_limit(0);
     }
 
-    public function updateStreaks($forcedUpdate)
+    /**
+     * Update the stock streaks after the market has closed
+     *
+     * @param $overwrite (whether to update all data from beginning)
+     * @return void
+     */
+
+    public function updateStreaks($overwrite = false)
     {
         $date = DB::table('summaries')
                 ->select('date')
@@ -27,7 +34,7 @@ class Stock {
                 ->where('streak_stored', $date)
                 ->first();
 
-            if ($stored && !$forcedUpdate) continue;
+            if ($stored && !$overwrite) continue;
                 
             $days = DB::table('summaries')
                 ->select('close', 'volume')
@@ -79,7 +86,7 @@ class Stock {
                 }
             }
 
-            $amount = $this->calculateMovePercentage($stock->symbol, $streak);
+            $amount = $this->calculateMovePercentage($days, $streak);
 
             $volume = $this->calculateStreakVolume($days, $streak);
 
@@ -99,6 +106,14 @@ class Stock {
         print "\nCompleted storing streaks.\n";
     }
 
+    /**
+     * Update the stock streaks after the market has closed
+     *
+     * @param  array $days (daily summaries)
+     * @param  int   $days (streak)
+     * @return int         (shares traded volume)
+     */
+
     public function calculateStreakVolume(array $days, $streak)
     {
         $daysOnStreak = array_slice($days, 0, $streak);
@@ -112,21 +127,30 @@ class Stock {
         return $volume;
     }
 
-    public function calculateMovePercentage($symbol, $streak)
+    /**
+     * Get the percentage the stock moved over the streak's duration
+     *
+     * @param  array  $days (daily summaries)
+     * @param  int    $days (streak)
+     * @return double       (move percentage)
+     */
+
+    public function calculateMovePercentage(array $days, $streak)
     {
         if ($streak == 0) return 0;
 
-        $closes = DB::table('summaries')
-                    ->where('symbol', $symbol)
-                    ->select('close')
-                    ->limit(abs($streak) + 1) // The math: MOST_RECENT_DATE price over $streak + 1 price
-                    ->orderBy('date', 'desc')
-                    ->get();
+        $days = array_slice($days, 0, abs($streak) + 1);
 
-        return round(($closes[0]->close / end($closes)->close - 1) * 100, 2);
+        return round(($days[0]->close / end($days)->close - 1) * 100, 2);
     }
 
-    public function store_stock_summary()
+    /**
+     * Store basic information about a stock
+     *
+     * @return void
+     */
+
+    public function storeStockInfo()
     {
         $files = File::files(app_path() . '/resources/stock_lists');
 
