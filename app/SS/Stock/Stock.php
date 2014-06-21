@@ -103,7 +103,7 @@ class Stock {
             print "Amount: " . $amount        . " # Volume: " . $volume . "\n";
         }
 
-        print "\nCompleted storing streaks.\n";
+        print "Done storing streaks for closing date: " . $date;
     }
 
     /**
@@ -116,7 +116,7 @@ class Stock {
 
     public function calculateStreakVolume(array $days, $streak)
     {
-        $daysOnStreak = array_slice($days, 0, $streak);
+        $daysOnStreak = array_slice($days, 0, abs($streak));
 
         $volume = 0;
 
