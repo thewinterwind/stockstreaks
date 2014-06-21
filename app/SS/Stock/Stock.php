@@ -139,9 +139,22 @@ class Stock {
     {
         if ($streak == 0) return 0;
 
+        if ($streak < 0)
+        {
+            var_dump($streak);
+            var_dump($days);
+        }
+
         $days = array_slice($days, 0, abs($streak) + 1);
 
-        return round(($days[0]->close / end($days)->close - 1) * 100, 2);
+        if ($streak < 0)
+        {
+            var_dump($days);
+        }
+
+        die;
+
+        return round((($days[0]->close / end($days)->close) - 1) * 100, 2);
     }
 
     /**
