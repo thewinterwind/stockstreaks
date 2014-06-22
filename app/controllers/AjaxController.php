@@ -9,7 +9,7 @@ class AjaxController extends Controller {
         $this->datatables = $datatables;
     }
 
-	public function stock_data()
+	public function fetchStockData()
 	{
         $columns = [
             [
