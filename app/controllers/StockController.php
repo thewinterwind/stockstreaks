@@ -1,5 +1,7 @@
 <?php
 
+use SS\Stock\Stock;
+
 class StockController extends Controller {
 
     public function index()
@@ -9,6 +11,11 @@ class StockController extends Controller {
         $data['header'] = 'Winning and Losing Streaks for NYSE, Nasdaq and AMEX stocks';
 
         return View::make('stocks.index', $data);
+    }
+
+    public function fetchStockData()
+    {
+        return (new Stock)->{__FUNCTION__}();
     }
 
 }

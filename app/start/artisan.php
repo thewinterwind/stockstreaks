@@ -18,5 +18,8 @@ Artisan::add(new UpdateStockHistoryCommand);
 // remove whitespace from a table's field
 Artisan::add(new RemoveWhitespaceFromFieldCommand);
 
+// remove whitespace from a table's field
+Artisan::add(new StoreStockDataCommand);
+
 // used to test something in the application quickly
 Artisan::add(new TestAnythingCommand);

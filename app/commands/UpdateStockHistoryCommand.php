@@ -37,8 +37,7 @@ class UpdateStockHistoryCommand extends Command {
 	 */
 	public function fire()
 	{
-		(new \SS\Stock\Stock)->store_stock_history();
+		(new \SS\Stock\Stock)->storeStockHistory();
 	}
-
 
 }

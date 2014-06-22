@@ -37,7 +37,7 @@ class FetchStockHistoryCommand extends Command {
 	 */
 	public function fire()
 	{
-		(new \SS\Stock\Stock)->fetch_stock_history();
+		(new \SS\Stock\Stock)->fetchStockHistory();
 	}
 
 
