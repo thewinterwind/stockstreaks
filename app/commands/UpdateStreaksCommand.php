@@ -39,7 +39,7 @@ class UpdateStreaksCommand extends Command {
 	{
         $force = $this->argument('force');
 
-		(new \SS\Stock\Stock)->updateStreaks($force);
+		return (new \SS\Stock\Stock)->updateStreaks($force);
 	}
 
     /**

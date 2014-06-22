@@ -40,12 +40,4 @@ class TestAnythingCommand extends Command {
         $this->call('ss:store-stock-data');
 	}
 
-    // protected function getArguments()
-    // {
-    //     return array(
-    //         array('symbol', InputArgument::OPTIONAL, 'Symbol name'),
-    //         array('streak', InputArgument::OPTIONAL, 'Streak amount'),
-    //     );
-    // }
-
 }

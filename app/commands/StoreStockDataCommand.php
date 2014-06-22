@@ -39,15 +39,21 @@ class StoreStockDataCommand extends Command {
 	 */
 	public function fire()
 	{
-        $stockRepo = new Stock;
-        $stocks = $stockRepo->getValidStocks();
-
-        foreach ($stocks as $stock)
+        try 
         {
-            $stockRepo->storeStockData($stock->symbol);
-        }
+            $stockRepo = new Stock;
+            $stocks = $stockRepo->getValidStocks();
 
-        return 'Finished updating stocks at: ' . date('l jS \of F h:i:s A');
+            foreach ($stocks as $stock)
+            {
+                $stockRepo->storeStockData($stock->symbol);
+            }
+
+            return 1;
+        }
+        catch (Exception $e) {}
+
+        return 0;
 	}
 
     /**
