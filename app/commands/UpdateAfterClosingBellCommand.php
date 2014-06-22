@@ -50,7 +50,7 @@ class UpdateAfterClosingBellCommand extends Command {
 
     protected function notify_admin(array $data, $subject)
     {
-        Mail::send('emails.cron.basic', $data, function($message)
+        Mail::send('emails.cron.basic', $data, function($message) use ($subject)
         {
             $message->to(Config::get('app.owner_email'))->subject($subject);
         });
