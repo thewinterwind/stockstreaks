@@ -3,6 +3,7 @@
 return array(
 
 	'owner_email' => 'anthonytrading81@gmail.com',
+    
     /*
     |--------------------------------------------------------------------------
     | Application Debug Mode
@@ -14,7 +15,7 @@ return array(
     |
     */
 
-    'debug' => false,
+    'debug' => true,
 
 	/*
 	|--------------------------------------------------------------------------

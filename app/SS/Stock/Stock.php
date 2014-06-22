@@ -99,8 +99,9 @@ class Stock {
             print "Symbol: " . $stock->symbol . " # Streak: " . $streak . " # ";
             print "Amount: " . $amount        . " # Volume: " . $volume . "\n";
 
-            return 1;
         }
+        
+        return 1;
     }
 
     /**
