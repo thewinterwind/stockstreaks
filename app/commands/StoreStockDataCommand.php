@@ -46,6 +46,8 @@ class StoreStockDataCommand extends Command {
         {
             $stockRepo->storeStockData($stock->symbol);
         }
+
+        return 'Finished updating stocks at: ' . date('l jS \of F h:i:s A');
 	}
 
     /**

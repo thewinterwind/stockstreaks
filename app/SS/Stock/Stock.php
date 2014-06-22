@@ -331,6 +331,7 @@ class Stock {
             ->select('symbol')
             ->where('symbol', 'NOT LIKE', '%^%') // some stocks have ^ in them (not doing these now)
             ->where('symbol', 'NOT LIKE', '%/%') // some stocks have / in them (not doing these now)
+            ->where('symbol', 'NOT LIKE', '%~%') // some bad data from CSV has stocks with ~ in them
             ->where('history_downloaded', '!=', $date)
             ->orderBy('symbol', 'asc')
             ->get();

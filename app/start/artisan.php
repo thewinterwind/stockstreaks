@@ -21,5 +21,8 @@ Artisan::add(new RemoveWhitespaceFromFieldCommand);
 // remove whitespace from a table's field
 Artisan::add(new StoreStockDataCommand);
 
+// script to update the data after the stock market closes
+Artisan::add(new UpdateAfterClosingBellCommand);
+
 // used to test something in the application quickly
 Artisan::add(new TestAnythingCommand);

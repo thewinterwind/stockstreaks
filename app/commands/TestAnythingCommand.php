@@ -37,9 +37,7 @@ class TestAnythingCommand extends Command {
 	 */
 	public function fire()
 	{
-		
-
-        dd($result);
+        $this->call('ss:store-stock-data');
 	}
 
     // protected function getArguments()
