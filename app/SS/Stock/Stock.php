@@ -278,7 +278,7 @@ class Stock {
             $data = json_decode(file_get_contents($resource));
 
             // $data has one property with everything in it (query), let's save its contents
-            if ($data) Cache::put($cache_key, $data->query, 60 * 24);
+            if ($data) Cache::put($cache_key, $data->query, 60);
         }
 
         return Cache::get($cache_key);
@@ -286,7 +286,11 @@ class Stock {
 
     public function storeStockData($symbol)
     {
-        $quote = $this->fetchStockData($symbol)->results->quote;
+        $stock = $this->fetchStockData($symbol);
+
+        if ( ! isset($stock->results)) return print $symbol . " is not an object." . PHP_EOL;
+
+        $quote = $stock->results->quote;
 
         $lastTrade = strip_tags($quote->LastTradeWithTime);
 
