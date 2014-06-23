@@ -1,6 +1,6 @@
 <?php namespace SS\Stock;
 
-use DB, File, Cache, Input;
+use DB, File, Cache, Input, Response;
 
 class Stock {
 
@@ -101,7 +101,7 @@ class Stock {
 
         }
         
-        return 1;
+        return 1; // lets the artisan command know the method finished without issue
     }
 
     /**
@@ -260,22 +260,18 @@ class Stock {
         }
     }
 
-    public function fetchStockData($stock = null)
+    public function fetchStockData($symbol = null)
     {
         // get stock data from artisan command or query string
-        $stock ?: Input::get('stock');
+        $symbol ?: Input::get('symbol');
 
         // cache key is a unique string of resource type, date, and resource id
-        $cache_key = 'stock_data' . date('Y-m-d') . $stock;
+        $cache_key = 'stock_data' . date('Y-m-d') . $symbol;
 
         // build query at https://developer.yahoo.com/yql/console/
         if ( ! Cache::has($cache_key))
         {
-            $resource = "https://query.yahooapis.com/v1/public/yql?q=";
-            $resource .= urlencode("select * from yahoo.finance.quotes ");
-            $resource .= urlencode("where symbol in ('$stock')");
-            $resource .= "&format=json&diagnostics=true";
-            $resource .= "&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys&callback=";
+            $resource = $this->getApiUrl($symbol);
 
             // fetch the json
             $data = json_decode(file_get_contents($resource));
@@ -285,6 +281,26 @@ class Stock {
         }
 
         return Cache::get($cache_key);
+    }
+
+    public function seeStockData()
+    {
+        $resource = $this->getApiUrl(Input::get('symbol'));
+
+        $data = json_decode(file_get_contents($resource));
+
+        var_dump($data);
+    }
+
+    protected function getApiUrl($symbol)
+    {
+        $url  = "https://query.yahooapis.com/v1/public/yql?q=";
+        $url .= urlencode("select * from yahoo.finance.quotes ");
+        $url .= urlencode("where symbol in ('$symbol')");
+        $url .= "&format=json&diagnostics=true";
+        $url .= "&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys&callback=";
+
+        return $url;
     }
 
     public function storeStockData($symbol)

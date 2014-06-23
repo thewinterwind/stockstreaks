@@ -2,7 +2,6 @@
 
 @section('content')
 
-    @if (false)
     <div class="row">
         <div class="col-md-12 col-lg-12 pt10">
             <a href="//www.bluehost.com/track/economical/" target="_blank">
@@ -10,7 +9,6 @@
             </a>
         </div>
     </div>
-    @endif
     
     <h2>{{ $header }}</h2><br>
     <table class="table table-bordered table-striped datatables">

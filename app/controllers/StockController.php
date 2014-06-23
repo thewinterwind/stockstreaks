@@ -18,4 +18,9 @@ class StockController extends Controller {
         return (new Stock)->{__FUNCTION__}();
     }
 
+    public function seeStockData()
+    {
+        return (new Stock)->{__FUNCTION__}();
+    }
+
 }
