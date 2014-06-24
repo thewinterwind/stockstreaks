@@ -313,20 +313,20 @@ class Stock {
 
         $lastTrade = strip_tags($quote->LastTradeWithTime);
 
-        list($lastTradeTime, $lastTradePrice) = explode(' - ', $lastTrade);
+        list($date, $lastTradePrice) = explode(' - ', $lastTrade);
 
-        $lastTradeTime = date('Y-m-d', strtotime($lastTradeTime));
+        $date = date('Y-m-d', strtotime($date));
 
         $dailySummary = DB::table('summaries')
             ->where('symbol', $symbol)
-            ->where('date', $lastTradeTime)->first();
+            ->where('date', $date)->first();
 
         if (is_null($dailySummary))
         {
             DB::table('summaries')
                 ->insert([
                     'symbol' => $symbol,
-                    'date' => $lastTradeTime,
+                    'date' => $date,
                     'open' => $quote->Open,
                     'close' => $lastTradePrice,
                     'adjusted_close' => $quote->LastTradePriceOnly,
